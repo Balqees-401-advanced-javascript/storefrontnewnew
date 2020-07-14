@@ -1,13 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { show } from '../store/categories';
+import {getRemoteDataCategory} from '../store/action';
+
 import '../style.scss'
-const categories = props => {
+const Categories = props => {
+    useEffect(() =>{
+        props.getRemoteDataCategory()
+      },[])
+    
     return (
         <section key='section' className="categories">
             <div className='hed' key='div'>Browse OUR categories</div>
             <ul key='ul'>
-                {props.categories.categories.map(element => {
+                {console.log(props)}
+                {props.reducer.categoryFromApi.map(element => {
                     return (
                         <React.Fragment key={element.displayName+'b'}>
                             <li key={element.displayName} onClick={() => props.show(element.name)}>
@@ -23,8 +30,10 @@ const categories = props => {
 }
 
 const mapStateToProps = state => ({
-    categories: state.categories
-});
-const mapDispatchToProps = { show };
+    categories: state.categories,
+    reducer: state.reducer 
 
-export default connect(mapStateToProps, mapDispatchToProps)(categories);
+});
+const mapDispatchToProps = { show, getRemoteDataCategory };
+
+export default connect(mapStateToProps, mapDispatchToProps)(Categories);

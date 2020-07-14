@@ -1,11 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { addItem } from '../store/categories';
+import {getRemoteData} from '../store/action';
+
 const Status = props => {
+  useEffect(() =>{
+    props.getRemoteData()
+  },[])
+
+
   return (
     <section >
       <ul>
-        {props.categories.products.map(element => {
+        {props.reducer.itemFromApi.map(element => {
           if (element.category === props.categories.activeCategory) {
             return (
               <React.Fragment key={element.name + 'd'}>
@@ -24,10 +31,12 @@ const Status = props => {
   );
 }
 
-const mapStateToProps = state => ({
-  categories: state.categories
+const mapStateToProps = state => ({ // to use state 
+  categories: state.categories,
+  reducer: state.reducer 
+
 });
 
-const mapDispatchToProps = { addItem };
+const mapDispatchToProps = { getRemoteData ,addItem }; // to use action 
 
 export default connect(mapStateToProps, mapDispatchToProps)(Status);
